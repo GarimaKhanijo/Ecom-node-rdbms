@@ -3,7 +3,7 @@ const db = require("../connection");
 
 const router = express.Router();
 
-// 📌 GET all categories
+//  GET all categories
 router.get("/", (req, resp) => {
   db.query("SELECT * FROM categories", (err, result) => {
     if (err) {
@@ -31,7 +31,7 @@ router.get("/:id", (req, resp) => {
   );
 });
 
-// 📌 DELETE a category by ID
+//  DELETE a category by ID
 router.delete("/:id", (req, resp) => {
   let id = req.params.id;
   db.query("DELETE FROM categories WHERE id = ?", [id], (error, result) => {
@@ -45,7 +45,7 @@ router.delete("/:id", (req, resp) => {
   });
 });
 
-// 📌 POST a new category
+//  POST a new category
 router.post("/", (req, resp) => {
   let body = req.body;
   if (!body.name) {
@@ -65,7 +65,7 @@ router.post("/", (req, resp) => {
   );
 });
 
-// 📌 UPDATE a category
+//  UPDATE a category
 router.patch("/", (req, resp) => {
   let { id, name } = req.body;
   
