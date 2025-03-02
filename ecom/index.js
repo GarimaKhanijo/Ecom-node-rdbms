@@ -4,6 +4,7 @@ const cors = require("cors");
 const db = require("./connection");
 const categoryRoutes = require("./routes/categories");
 const productRoutes = require("./routes/products");
+const locationRoutes = require("./routes/locations");
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 // Use category routes
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/locations", locationRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
