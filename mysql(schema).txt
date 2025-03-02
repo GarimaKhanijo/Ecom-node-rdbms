@@ -1,0 +1,132 @@
+USE Ecommerce; 
+CREATE TABLE Users (
+id INT auto_increment primary key,
+name varchar(100) not null,
+email varchar(100) unique not null,
+password varchar(255) not null,
+role ENUM('customer' , 'admin') default 'customer',
+created timestamp default current_timestamp
+);
+
+
+
+
+
+Create Table categories (
+id int auto_increment primary key,
+name varchar(100) not null,
+created timestamp default current_timestamp
+);
+
+
+
+
+CREATE TABLE Products (
+id int auto_increment primary key,
+name varchar(255)  not null,
+description text,
+price decimal(10,2) not null,
+stock int not null default 0,
+category int,
+image varchar(255),
+created timestamp default current_timestamp,
+foreign key (category) references categories(id) on delete set null
+);
+
+
+
+
+create table cart (
+id int auto_increment primary key,
+user_id int not null,
+product_id int not null,
+quantity int not null default 1,
+created timestamp default current_timestamp,
+foreign key(user_id)  references users(id) on delete cascade,
+foreign key(product_id)  references Products(id) on delete cascade
+);
+
+
+
+
+create table whislist (
+id int auto_increment primary key,
+user_id int not null ,
+product_id int not null,
+created timestamp default current_timestamp,
+foreign key(user_id) references users(id) on delete cascade,
+foreign key(product_id) references Products(id) on delete cascade
+);
+
+
+
+
+create table orders (
+id int auto_increment primary key,
+user_id int not null,
+total_price decimal(10,2) not null,
+status ENUM('pending','shipped','delivered','cancelled') default 'pending',
+created timestamp default current_timestamp,
+foreign key (user_id) references users(id) on delete cascade
+);
+
+
+
+
+create table order_items(
+id int auto_increment primary key,
+order_id int not null,
+product_id int not null,
+quantity int not null default 1,
+price decimal(10,2) not null,
+created timestamp default current_timestamp,
+foreign key (order_id) references orders(id) on delete cascade,
+foreign key (product_id) references Products(id) on delete cascade
+);
+
+
+
+use Ecommerce;
+
+SELECT * FROM categories;
+
+SHOW TABLES;
+ALTER TABLE Users add column phone_no varchar(15), add column address Text;
+alter table products add column brand varchar(255) after name;
+
+create table payment (
+id int auto_increment primary key,
+order_id int not null,
+amount decimal(10,2) not null,
+method enum('credit_card','debit_card','net-banking','UPI','wallet') default 'UPI',
+status enum('pending','completed','failed') default 'pending',
+created timestamp default current_timestamp,
+foreign key (order_id) references orders(id) on delete cascade
+);
+
+
+
+create table location (
+id int auto_increment primary key,
+user_id int not null,
+address text not null,
+city varchar(100) not null,
+postal_code varchar(20) not null,
+country varchar(100) default 'India',
+created timestamp default current_timestamp,
+foreign key (user_id) references users(id) on delete cascade
+);
+
+
+
+select * from categories;
+select * from products;
+select * from location;
+select * from orders;
+select * from payment;
+select * from users;
+select * from cart;
+select * from whistlist;
+select * from order_items;
+
+
