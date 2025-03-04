@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+// <<<<<<< HEAD
 const db = require("../config/connection");
 
 exports.getAllCategories = (req, res) => {
@@ -41,7 +41,7 @@ exports.deleteCategory = (req, res) => {
     if (result.affectedRows === 0) return res.status(404).json({ msg: "No record found" });
     res.status(200).json({ msg: "Category deleted" });
   });
-=======
+// =======
 const db = require("../config/connection");
 
 exports.getAllCategories = (req, res) => {
@@ -84,5 +84,5 @@ exports.deleteCategory = (req, res) => {
     if (result.affectedRows === 0) return res.status(404).json({ msg: "No record found" });
     res.status(200).json({ msg: "Category deleted" });
   });
->>>>>>> 8d0c3eed3ec16e2fa3b03e78db03ba4456ad4f24
+// >>>>>>> 8d0c3eed3ec16e2fa3b03e78db03ba4456ad4f24
 };
