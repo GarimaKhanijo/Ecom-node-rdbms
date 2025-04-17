@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Garamond&display=swap');
+.custom-navbar {
+    /* background-color: var(--accent-color); */
+    padding: 20px 0;
+    font-family: 'Dancing Script', cursive;
+    font-style: italic;
+  }
+  
+  .nav-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    letter-spacing: 2px;
+    font-size: 20px;
+  }
+  
+  .custom-navbar a {
+    /* color: var(--text-color); */
+    text-decoration: none;
+    font-family: var(--font-main);
+    font-style: italic;
+    transition: color 0.3s ease;
+    font-weight: bold;
+  }
+  
+  .custom-navbar a:hover {
+    color: var(--highlight-color);
+  }
+  
+  .custom-navbar button {
+    background-color: transparent;
+    /* border: 2px solid var(--text-color); */
+    padding: 6px 14px;
+    font-size: 18px;
+    font-style: italic;
+    font-family: var(--font-main);
+    /* color: var(--text-color); */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    letter-spacing: 1.5px;
+  }
+  
+  .custom-navbar button:hover { 
+    color: white;
+    border-color: var(--highlight-color);
+  }

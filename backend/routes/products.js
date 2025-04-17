@@ -1,24 +1,43 @@
-<<<<<<< HEAD
 const express = require("express");
-const { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } = require("../controllers/productscon");
+const {
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getUsersWhoOrderedProduct,
+  getProductsByUser,
+  getProductsByCategory,
+} = require("../controllers/productscon");
+const { isAuthenticated, isAdmin } = require("../middlewares/auth");
+
 const router = express.Router();
 
 router.get("/", getAllProducts);
+
+router.get("/my", isAuthenticated, isAdmin, getProductsByUser);
+
 router.get("/:id", getProductById);
-router.post("/", createProduct);
+
+router.post("/", isAuthenticated, isAdmin, createProduct);
+
+router.get("/products/id", (req, res) => {
+  let categoryId = req.query.categoryId;
+
+  if (!categoryId || isNaN(categoryId)) {
+    return res.status(400).json({ msg: "Invalid or missing categoryId" });
+  }
+
+  getProductsByCategory(categoryId, (err, products) => {
+    if (err) return res.status(500).json({ msg: "Error fetching products by category", error: err });
+    res.status(200).json({ products });
+  });
+});
+
 router.patch("/:id", updateProduct);
+
 router.delete("/:id", deleteProduct);
 
-=======
-const express = require("express");
-const { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } = require("../controllers/productscon");
-const router = express.Router();
+router.get("/:id/users", getUsersWhoOrderedProduct);
 
-router.get("/", getAllProducts);
-router.get("/:id", getProductById);
-router.post("/", createProduct);
-router.patch("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
-
->>>>>>> 8d0c3eed3ec16e2fa3b03e78db03ba4456ad4f24
 module.exports = router;

@@ -7,13 +7,15 @@ const { otpStore } = require("../controllers/otpcon");
 
 
 exports.registerUser = async (req, res) => {
-  let { name, email, password, phone_no, address } = req.body;
-  if (!name || !email || !password) return res.status(400).json({ msg: "Missing fields" });
-
+  let { name, email, password, phone_no, address , role} = req.body;
+  if (!name || !email || !password || !role) return res.status(400).json({ msg: "Missing fields" });
+  if (role !== "customer" && role !== "admin") {
+    return res.status(400).json({ msg: "Invalid role" });
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   db.query(
-      "INSERT INTO users (name, email, password, phone_no, address, role) VALUES (?, ?, ?, ?, ?, 'customer')",
-      [name, email, hashedPassword, phone_no || null, address || null],
+      "INSERT INTO users (name, email, password, phone_no, address, role) VALUES (?, ?, ?, ?, ?, ?)",
+      [name, email, hashedPassword, phone_no || null, address || null, role],
       (err, result) => {
           if (err) {
               if (err.code === "ER_DUP_ENTRY") {
@@ -24,7 +26,7 @@ exports.registerUser = async (req, res) => {
 
           const user_id = result.insertId;
           const token = jwt.sign(
-              { id: user_id, name, phone_no, role: "customer" },
+              { id: user_id, name, phone_no, role},
               process.env.SECRET_KEY,
               { expiresIn: "7d" }
           );
@@ -33,29 +35,51 @@ exports.registerUser = async (req, res) => {
       }
   );
 };
+exports.loginUser = (req, res) => {
+  let { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ msg: "Missing fields" });
 
-  
-  exports.loginUser = (req, res) => {
-    let { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ msg: "Missing fields" });
-  
-    db.query("SELECT * FROM users WHERE email = ?", [email], async (err, users) => {
+  db.query("SELECT * FROM users WHERE email = ?", [email], async (err, users) => {
       if (!users.length) return res.status(401).json({ msg: "Invalid email or password" });
-  
+
       const user = users[0];
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword) return res.status(401).json({ msg: "Invalid email or password" });
+
+      // Generate JWT token
+      const token = jwt.sign(
+          { id: user.id, name: user.name, phone_no: user.phone_no, role: user.role },
+          process.env.SECRET_KEY,
+          { expiresIn: "7d" }
+      );
+
+      // Send response with token
+      res.json({ msg: "Login successful", token });
+  });
+};
+
+  
+  // exports.loginUser = (req, res) => {
+  //   let { email, password } = req.body;
+  //   if (!email || !password) return res.status(400).json({ msg: "Missing fields" });
+  
+  //   db.query("SELECT * FROM users WHERE email = ?", [email], async (err, users) => {
+  //     if (!users.length) return res.status(401).json({ msg: "Invalid email or password" });
+  
+  //     const user = users[0];
+  //     const validPassword = await bcrypt.compare(password, user.password);
+  //     if (!validPassword) return res.status(401).json({ msg: "Invalid email or password" });
   
       
-      const token = jwt.sign(
-        { id: user.id, name: user.name, phone_no: user.phone_no, role: user.role },
-        process.env.SECRET_KEY,
-        { expiresIn: "7d" }
-      );
+  //     const token = jwt.sign(
+  //       { id: user.id, name: user.name, phone_no: user.phone_no, role: user.role },
+  //       process.env.SECRET_KEY,
+  //       { expiresIn: "7d" }
+  //     );
   
-      res.json({ msg: "Login successful", token });
-    });
-  };
+  //     res.json({ msg: "Login successful", token });
+  //   });
+  // };
   
 
   exports.getUserDetails = (req, res) => {
