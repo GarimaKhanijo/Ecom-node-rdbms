@@ -8,9 +8,21 @@ exports.getAllCategories = (req, res) => {
 
 exports.getCategoryById = (req, res) => {
   let catId = req.params.id;
+
+  // Validate category ID to ensure it's a number
+  if (isNaN(catId)) {
+    return res.status(400).json({ msg: "Invalid category ID" });
+  }
+
   db.query("SELECT * FROM categories WHERE id = ?", [catId], (err, result) => {
-    if (err) return res.status(500).json({ msg: err });
-    if (result.length === 0) return res.status(404).json({ msg: "Category not found" });
+    if (err) {
+      return res.status(500).json({ msg: "Error fetching category", error: err });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ msg: "Category not found" });
+    }
+
     res.status(200).json({ category: result[0] });
   });
 };

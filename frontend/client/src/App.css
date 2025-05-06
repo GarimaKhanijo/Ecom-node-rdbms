@@ -1,0 +1,44 @@
+:root {
+  --bg-color: #fdfaf6;
+  --accent-color: #e3cfc1;
+  --text-color: #3d2c29;
+  --highlight-color: #b48b7d;
+  --font-main: 'Georgia', serif;
+  --font-accent: 'Garamond', serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-main);
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+}
+h1, h2, h3 {
+  font-family: var(--font-accent);
+  color: var(--highlight-color);
+}
+
+a {
+  text-decoration: none;
+  color: var(--highlight-color);
+}
+
+button {
+  background-color: var(--accent-color);
+  border: none;
+  padding: 8px 16px;
+  font-style: italic;
+  font-family: var(--font-main);
+  color: var(--text-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--highlight-color);
+  color: white;
+}
+

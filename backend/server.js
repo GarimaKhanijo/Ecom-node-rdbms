@@ -18,15 +18,15 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("<h1>E-Commerce API Running</h1>"));
-app.use("/users", userRoutes);
-app.use("/otp",otpRoutes);
-app.use("/orders",orderRoutes);
-app.use("/order_items",orderItems);
-app.use("/categories", categoryRoutes);
-app.use("/products", productRoutes);
-app.use("/payments",payments);
-app.use("/location",locationroute);
+app.use("/api/users", userRoutes);
+app.use("/api/otp",otpRoutes);
+app.use("/api/orders",orderRoutes);
+app.use("/api/order_items",orderItems);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/payments",payments);
+app.use("/api/location",locationroute);
 app.use("/wishlist",wishlistroute);
-app.use("/cart",cartRoutes);
+app.use("/api/cart",cartRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
